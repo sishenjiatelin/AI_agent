@@ -5,16 +5,23 @@ ai_agent
 ├─ app
 ├─ data
 │  ├─ day02_result.json
+│  ├─ jobs.csv
+│  ├─ jobs.json
 │  └─ sample_job.txt
 ├─ docs
 │  └─ screenshots
 ├─ logs
-│  └─ day01.log
+│  ├─ day01.log
+│  └─ day03_convert.log
 ├─ main.py
 ├─ requirements.txt
 ├─ scripts
+│  ├─ __init__.py
+│  └─ convert_jobs.py
 ├─ src
-│  └─ day02_basics.py
+│  ├─ __init__.py
+│  ├─ day02_basics.py
+│  └─ io_utils.py
 └─ tests
 
 ```
