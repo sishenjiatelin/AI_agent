@@ -23,10 +23,15 @@ def normalize_job(
 
     if not jd_text:
         logger.warning(
-            "第 %s 行跳过：jd_text 为空。company=%s, title=%s",
-            row_number,
-            company,
-            title,
+            f"第{row_number}行跳过：jd_text 为空。company={company}, title={title}",
+
+        )
+        return None
+    
+    if not title:
+        logger.warning(
+            f"第{row_number}行跳过：jd_text={jd_text}。company={company}, title 为空",
+
         )
         return None
 
@@ -59,7 +64,7 @@ def convert_jobs(
             continue
 
         jobs.append(job)
-
+    
     result = {
         "total_rows": len(rows),
         "success_count": len(jobs),
@@ -76,6 +81,7 @@ def convert_jobs(
         skipped_count,
         json_path,
     )
+
 
 
 if __name__ == "__main__":
