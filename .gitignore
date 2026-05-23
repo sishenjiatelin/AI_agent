@@ -5,3 +5,4 @@ __pycache__/
 logs/*.log
 data/*.sqlite
 uploads/
+

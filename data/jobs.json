@@ -1,35 +1,22 @@
-{
-  "total_rows": 6,
-  "success_count": 4,
-  "skipped_count": 2,
-  "jobs": [
-    {
-      "id": 1,
-      "company": "智学科技",
-      "title": "Python后端实习生",
-      "jd_text": "负责 Python 后端接口开发，熟悉 FastAPI、SQL、日志和接口测试。",
-      "source": "manual"
-    },
-    {
-      "id": 2,
-      "company": "未来智能",
-      "title": "AI应用开发工程师",
-      "jd_text": "参与 LLM 应用开发，使用 Python、RAG、Agent、向量检索构建智能问答系统。",
-      "source": "manual"
-    },
-    {
-      "id": 4,
-      "company": "开源教育",
-      "title": "Python工程师",
-      "jd_text": "维护学习平台后端服务，处理文件上传、数据清洗、日志记录和 API 开发。",
-      "source": "manual"
-    },
-    {
-      "id": 6,
-      "company": "学科空数",
-      "title": "AI应用开发工程师",
-      "jd_text": "参与 LLM 应用开发，使用 Python处理文件上传、数据清洗、日志记录和 API 开发。",
-      "source": "manual"
-    }
-  ]
-}
+[
+  {
+    "company": "OpenAI Demo",
+    "title": "AI Application Intern",
+    "jd_text": "Need Python FastAPI RAG experience"
+  },
+  {
+    "company": "Byte Demo",
+    "title": "LLM Backend Intern",
+    "jd_text": "Need Python SQL API experience"
+  },
+  {
+    "company": "Tencent Demo",
+    "title": "AI Agent Intern",
+    "jd_text": "Need Agent Tool Calling and Python"
+  },
+  {
+    "company": "Alibaba Demo",
+    "title": "RAG Engineer Intern",
+    "jd_text": "Need RAG Embedding Vector Search"
+  }
+]

@@ -1,11 +1,14 @@
 {
-  "word_count": 90,
-  "matched_keywords": [
+  "word_count": 18,
+  "matched_skills": [
     "Python",
     "FastAPI",
     "RAG",
     "Agent",
-    "SQL"
+    "SQL",
+    "Docker",
+    "LLM",
+    "API"
   ],
-  "missing_keywords": []
+  "missing_skills": []
 }

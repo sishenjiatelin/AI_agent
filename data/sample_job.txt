@@ -1,7 +1,3 @@
-某 AI 应用开发工程师岗位要求：
-
-1. 使用 Python 开发后端服务，熟悉 FastAPI 或 Flask。
-2. 能处理 JD、简历、学习资料等文本数据。
-3. 了解 RAG、Agent、Prompt Engineering，有 LLM 应用经验加分。
-4. 熟悉 SQL 或 SQLite，了解 Git、Linux 基础。
-5. 能编写清晰文档和测试，具备良好沟通能力。
+我们正在招聘 AI 应用开发实习生，要求熟悉 Python，了解 FastAPI，
+能参与 RAG 问答系统、Agent 工具调用和后端接口开发。
+有 SQL、Docker、LLM API 使用经验者优先。

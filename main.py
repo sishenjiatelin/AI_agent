@@ -2,27 +2,26 @@ from datetime import datetime
 from pathlib import Path
 import os
 
-from dotenv import load_dotenv
-
-
 BASE_DIR = Path(__file__).resolve().parents[0]
-LOG_DIR = BASE_DIR / "logs"
-LOG_FILE = LOG_DIR / "day01.log"
+LOG_FILE = BASE_DIR / "logs" /"day01.log"
+ENV_FILE = BASE_DIR / ".env"
 
-def main() :
-    load_dotenv(BASE_DIR / ".env")
+def load_app_name(path:Path) -> str:
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("APP_NAME"):
+            return line.split("=",1)[1].strip()
 
-    app_name = os.getenv("APP_NAME", "AI Job Learning Agent")
-    app_env = os.getenv("APP_ENV", "dev")
 
 
-    now = datetime.now().isoformat(timespec="seconds")
-    message = f" [**{now}**]\n {app_name} is ready.\n env={app_env}"
+def main() -> None:
+    app_name = load_app_name(ENV_FILE)
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    print(message)
+    with LOG_FILE.open("w",encoding="utf-8") as f:
+        f.write(f"{app_name} started successfully at {now}\n")
 
-    LOG_DIR.mkdir(parents=True, exist_ok=True)
-    LOG_FILE.write_text(message + "\n", encoding="utf-8")
+
+    print(f"{app_name} started at {now}")
 
 
 if __name__ == "__main__":

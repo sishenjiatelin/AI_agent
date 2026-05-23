@@ -1,27 +1,16 @@
+import os
 from pathlib import Path
 
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from dotenv import load_dotenv
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+load_dotenv()
 
 
-class Settings(BaseSettings):
-    app_env: str = "dev"
-    data_dir: Path = Path("data")
-    log_level: str = "INFO"
-
-    model_config = SettingsConfigDict(
-        env_file=PROJECT_ROOT / ".env",
-        env_file_encoding="utf-8",
-        extra="ignore",
-    )
-
-    @property
-    def resolved_data_dir(self) -> Path:
-        if self.data_dir.is_absolute():
-            return self.data_dir
-        return PROJECT_ROOT / self.data_dir
+class Settings:
+    APP_NAME: str = os.getenv("APP_NAME", "AI Job Agent")
+    DATA_DIR: Path = Path(os.getenv("DATA_DIR", "data"))
+    LOG_DIR: Path = Path(os.getenv("LOG_DIR", "logs"))
 
 
 settings = Settings()
