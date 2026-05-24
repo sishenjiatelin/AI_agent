@@ -1,0 +1,29 @@
+[
+  {
+    "name": "job_success",
+    "data": {
+      "company": "OpenAI",
+      "title": "AI Application Engineer",
+      "skills": [
+        "Python",
+        "FastAPI",
+        "Pydantic"
+      ]
+    }
+  },
+  {
+    "name": "llm_success",
+    "data": {
+      "skills": [
+        "Python",
+        "RAG"
+      ],
+      "degree": "本科及以上",
+      "experience_years": 1,
+      "location": "北京",
+      "bonus_points": [
+        "有 LLM 项目经验"
+      ]
+    }
+  }
+]
