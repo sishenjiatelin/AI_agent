@@ -1,3 +1,9 @@
-我们正在招聘 AI 应用开发实习生，要求熟悉 Python，了解 FastAPI，
-能参与 RAG 问答系统、Agent 工具调用和后端接口开发。
-有 SQL、Docker、LLM API 使用经验者优先。
+公司：星火智能
+岗位：AI应用开发实习生
+技能要求：Python、FastAPI、Pydantic、RAG、Git
+经验要求：1年以上
+学历要求：本科及以上
+地点：北京
+
+岗位描述：
+参与 AI 求职学习 Agent 平台开发，负责岗位 JD 解析、资料处理和基础后端接口。

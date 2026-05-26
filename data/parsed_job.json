@@ -1,0 +1,16 @@
+{
+  "company": "星火智能",
+  "title": "AI应用开发实习生",
+  "skills": [
+    "Python",
+    "FastAPI",
+    "Pydantic",
+    "RAG",
+    "Agent",
+    "Git"
+  ],
+  "experience_years": 1,
+  "degree": "本科及以上",
+  "location": "北京",
+  "bonus_points": []
+}
