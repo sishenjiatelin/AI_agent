@@ -1,0 +1,4 @@
+2026-05-28 14:53:16,596 | INFO | llm request | provider=mock | prompt_chars=256
+2026-05-28 14:53:16,597 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.15
+2026-05-28 15:06:28,729 | INFO | llm request | provider=mock | prompt_chars=12
+2026-05-28 15:06:28,729 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.14
