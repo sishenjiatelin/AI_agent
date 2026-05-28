@@ -2,3 +2,9 @@
 2026-05-28 14:53:16,597 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.15
 2026-05-28 15:06:28,729 | INFO | llm request | provider=mock | prompt_chars=12
 2026-05-28 15:06:28,729 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.14
+2026-05-28 20:18:44,821 | INFO | llm request | provider=mock | prompt_chars=252
+2026-05-28 20:18:44,821 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.07
+2026-05-28 20:20:37,539 | INFO | llm request | provider=mock | prompt_chars=146
+2026-05-28 20:20:37,539 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.07
+2026-05-28 20:20:37,542 | INFO | llm request | provider=mock | prompt_chars=138
+2026-05-28 20:20:37,542 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.09
