@@ -8,3 +8,15 @@
 2026-05-28 20:20:37,539 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.07
 2026-05-28 20:20:37,542 | INFO | llm request | provider=mock | prompt_chars=138
 2026-05-28 20:20:37,542 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.09
+2026-05-29 18:01:23,520 | INFO | llm request | provider=mock | prompt_chars=122
+2026-05-29 18:01:23,523 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=2.77
+2026-05-29 18:01:28,018 | INFO | llm request | provider=mock | prompt_chars=122
+2026-05-29 18:01:28,018 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.11
+2026-05-29 18:01:28,649 | INFO | llm request | provider=mock | prompt_chars=122
+2026-05-29 18:01:28,649 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.14
+2026-05-29 18:02:35,026 | INFO | llm request | provider=mock | prompt_chars=194
+2026-05-29 18:02:35,026 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.09
+2026-05-29 18:04:27,481 | INFO | llm request | provider=mock | prompt_chars=194
+2026-05-29 18:04:27,481 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.11
+2026-05-29 18:16:14,911 | INFO | llm request | provider=mock | prompt_chars=163
+2026-05-29 18:16:14,911 | INFO | llm response | provider=mock | response_chars=199 | elapsed_ms=0.12

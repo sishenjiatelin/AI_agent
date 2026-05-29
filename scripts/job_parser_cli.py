@@ -51,6 +51,7 @@ def validate_job(data: dict[str, Any]) -> dict[str, Any]:
     result = basic.model_dump()
     result.update(detail.model_dump())
     return result
+
 def parse_job(input_path: Path, output_path: Path) -> dict[str, Any]:
     logger = setup_logger("day08_cli", str(LOG_PATH))
     logger.info("start parse | input=%s | output=%s", input_path, output_path)
