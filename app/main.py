@@ -1,27 +1,28 @@
-from __future__ import annotations
+from __future__ import annotations 
+import json 
+import uuid 
+from pathlib import Path 
+from typing import Any 
+from fastapi import FastAPI 
+from fastapi.responses import JSONResponse 
+from pydantic import ValidationError 
 
-import json
-from pathlib import Path
-from typing import Any
-
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, ValidationError
-
-from app.clients.llm_client import build_llm_client
-from app.schemas.job import JobSchema, LLMExtractedJob
+from app.clients.llm_client import build_llm_client 
+from app.schemas.api import JobParseRequest, JobParseResponse 
+from app.schemas.job import JobSchema, LLMExtractedJob 
 from app.utils.logger import setup_logger
 
 BASE_DIR = Path(__file__).resolve().parents[1]
-LOG_PATH = BASE_DIR / "logs" / "day09_api.log"
+LOG_PATH = BASE_DIR / "logs" / "day10_api.log"
 LOG_PATH.parent.mkdir(exist_ok=True)
 
-logger = setup_logger("day09_api", str(LOG_PATH))
+logger = setup_logger("day10_api", str(LOG_PATH))
 
 app = FastAPI(title="AI Job Agent API", version="0.1.0")
 
 
-class JobParseRequest(BaseModel):
-    jd_text: str
+def new_request_id() -> str: 
+    return uuid.uuid4().hex[:8]
 
 
 def clean_text(text: str) -> str:
@@ -57,39 +58,45 @@ def validate_job(data: dict[str, Any]) -> dict[str, Any]:
     result.update(detail.model_dump())
     return result
 
+def api_error( status_code: int, error_code: str, message: str, detail: str, request_id: str, ) -> JSONResponse: 
+    return JSONResponse( 
+        status_code=status_code, 
+        content={ "error": {"error_code": error_code, 
+                            "message": message, 
+                            "detail": detail, 
+                            "request_id": request_id, } }, )
 
 @app.get("/health")
 def health() -> dict[str, str]:
     return {
         "status": "ok",
         "service": "ai-job-agent",
-        "day": "day09",
+        "day": "day10",
     }
 
 
-@app.post("/jobs/parse")
-def parse_job(payload: JobParseRequest) -> dict[str, Any]:
-    jd_text = clean_text(payload.jd_text)
-    if not jd_text:
-        raise HTTPException(status_code=400, detail="jd_text 不能为空")
-
-    client = build_llm_client()
-    response = client.generate(build_prompt(jd_text))
-
-    try:
-        raw_data = json.loads(response.text)
-        job = validate_job(raw_data)
-    except (json.JSONDecodeError, KeyError, ValidationError) as exc:
-        logger.error("jobs parse failed | error=%s", exc)
-        raise HTTPException(status_code=500, detail=f"解析失败: {exc}") from exc
-
-    logger.info("jobs parse ok | company=%s | title=%s", job["company"], job["title"])
-
-    return {
-        "job": job,
-        "llm": {
-            "provider": response.provider,
-            "is_mock": response.is_mock,
-            "elapsed_ms": round(response.elapsed_ms, 2),
-        },
-    }
+@app.post("/jobs/parse", response_model=JobParseResponse) 
+def parse_job(payload: JobParseRequest) -> JobParseResponse | JSONResponse: 
+    request_id = new_request_id() 
+    jd_text = clean_text(payload.jd_text) 
+    if not jd_text: 
+        logger.warning("jobs parse bad request | request_id=%s", request_id) 
+        return api_error( 400, "EMPTY_JD_TEXT", "jd_text 不能为空", "请传入一段岗位 JD 文本", request_id, ) 
+    client = build_llm_client() 
+    response = client.generate(build_prompt(jd_text)) 
+    try: 
+        raw_data = json.loads(response.text) 
+        job = validate_job(raw_data) 
+    except (json.JSONDecodeError, KeyError, ValidationError) as exc: 
+        logger.error("jobs parse failed | request_id=%s | error=%s", request_id, exc) 
+        return api_error( 500, 
+                         "JOB_PARSE_FAILED", 
+                         "岗位解析失败", 
+                         str(exc), 
+                         request_id, ) 
+    logger.info( "jobs parse ok | request_id=%s | company=%s | title=%s", request_id, job["company"], job["title"], ) 
+    return JobParseResponse( job=job,
+                             llm={"provider": response.provider,
+                                "is_mock": response.is_mock, 
+                                "elapsed_ms": round(response.elapsed_ms, 2), }, 
+                            request_id=request_id, )
