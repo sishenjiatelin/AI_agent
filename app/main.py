@@ -7,6 +7,11 @@ from fastapi import FastAPI
 from fastapi.responses import JSONResponse 
 from pydantic import ValidationError 
 
+from fastapi import Depends, HTTPException
+from sqlmodel import Session, select
+
+from app.db.session import create_db_and_tables, get_session
+from app.models.job import Job, JobCreate, JobRead
 from app.clients.llm_client import build_llm_client 
 from app.schemas.api import JobParseRequest, JobParseResponse 
 from app.schemas.job import JobSchema, LLMExtractedJob 
@@ -19,6 +24,10 @@ LOG_PATH.parent.mkdir(exist_ok=True)
 logger = setup_logger("day10_api", str(LOG_PATH))
 
 app = FastAPI(title="AI Job Agent API", version="0.1.0")
+
+@app.on_event("startup")
+def on_startup() -> None:
+    create_db_and_tables()
 
 
 def new_request_id() -> str: 
@@ -100,3 +109,41 @@ def parse_job(payload: JobParseRequest) -> JobParseResponse | JSONResponse:
                                 "is_mock": response.is_mock, 
                                 "elapsed_ms": round(response.elapsed_ms, 2), }, 
                             request_id=request_id, )
+
+def to_job_read(job: Job) -> JobRead:
+    return JobRead(
+        id=job.id,
+        company=job.company,
+        title=job.title,
+        jd_text=job.jd_text,
+        skills=json.loads(job.skills_json),
+        created_at=job.created_at,
+    )
+
+
+@app.post("/jobs", response_model=JobRead)
+def create_job(payload: JobCreate, session: Session = Depends(get_session)) -> JobRead:
+    job = Job(
+        company=payload.company,
+        title=payload.title,
+        jd_text=payload.jd_text,
+        skills_json=json.dumps(payload.skills, ensure_ascii=False),
+    )
+    session.add(job)
+    session.commit()
+    session.refresh(job)
+    return to_job_read(job)
+
+
+@app.get("/jobs", response_model=list[JobRead])
+def list_jobs(session: Session = Depends(get_session)) -> list[JobRead]:
+    jobs = session.exec(select(Job).order_by(Job.id)).all()
+    return [to_job_read(job) for job in jobs]
+
+
+@app.get("/jobs/{job_id}", response_model=JobRead)
+def get_job(job_id: int, session: Session = Depends(get_session)) -> JobRead:
+    job = session.get(Job, job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="岗位不存在")
+    return to_job_read(job)
