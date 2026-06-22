@@ -1,20 +1,23 @@
-from __future__ import annotations 
-import json 
-import uuid 
-from pathlib import Path 
-from typing import Any 
-from fastapi import FastAPI 
-from fastapi.responses import JSONResponse 
-from pydantic import ValidationError 
+from __future__ import annotations
 
-from fastapi import Depends, HTTPException
-from sqlmodel import Session, select
+import json
+import uuid
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+from pathlib import Path
+from typing import Any
 
+from fastapi import Depends, FastAPI
+from fastapi.responses import JSONResponse
+from pydantic import ValidationError
+from sqlmodel import Session
+
+from app.clients.llm_client import build_llm_client
 from app.db.session import create_db_and_tables, get_session
-from app.models.job import Job, JobCreate, JobRead
-from app.clients.llm_client import build_llm_client 
-from app.schemas.api import JobParseRequest, JobParseResponse 
-from app.schemas.job import JobSchema, LLMExtractedJob 
+from app.models.job import JobCreate, JobRead, JobUpdate
+from app.schemas.api import JobParseRequest, JobParseResponse
+from app.schemas.job import JobSchema, LLMExtractedJob
+from app.services import job_service
 from app.utils.logger import setup_logger
 
 BASE_DIR = Path(__file__).resolve().parents[1]
@@ -23,11 +26,17 @@ LOG_PATH.parent.mkdir(exist_ok=True)
 
 logger = setup_logger("day10_api", str(LOG_PATH))
 
-app = FastAPI(title="AI Job Agent API", version="0.1.0")
-
-@app.on_event("startup")
-def on_startup() -> None:
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     create_db_and_tables()
+    yield
+
+
+app = FastAPI(
+    title="AI Job Agent API",
+    version="0.1.0",
+    lifespan=lifespan,
+)
 
 
 def new_request_id() -> str: 
@@ -122,28 +131,50 @@ def to_job_read(job: Job) -> JobRead:
 
 
 @app.post("/jobs", response_model=JobRead)
-def create_job(payload: JobCreate, session: Session = Depends(get_session)) -> JobRead:
-    job = Job(
-        company=payload.company,
-        title=payload.title,
-        jd_text=payload.jd_text,
-        skills_json=json.dumps(payload.skills, ensure_ascii=False),
-    )
-    session.add(job)
-    session.commit()
-    session.refresh(job)
-    return to_job_read(job)
+def create_job(
+    payload: JobCreate,
+    session: Session = Depends(get_session),
+) -> JobRead:
+    return job_service.create_job(session, payload)
 
 
 @app.get("/jobs", response_model=list[JobRead])
-def list_jobs(session: Session = Depends(get_session)) -> list[JobRead]:
-    jobs = session.exec(select(Job).order_by(Job.id)).all()
-    return [to_job_read(job) for job in jobs]
+def list_jobs(
+    keyword: str | None = None,
+    skill: str | None = None,
+    page: int = 1,
+    page_size: int = 10,
+    session: Session = Depends(get_session),
+) -> list[JobRead]:
+    return job_service.list_jobs(
+        session=session,
+        keyword=keyword,
+        skill=skill,
+        page=page,
+        page_size=page_size,
+    )
 
 
 @app.get("/jobs/{job_id}", response_model=JobRead)
-def get_job(job_id: int, session: Session = Depends(get_session)) -> JobRead:
-    job = session.get(Job, job_id)
-    if job is None:
-        raise HTTPException(status_code=404, detail="岗位不存在")
-    return to_job_read(job)
+def get_job(
+    job_id: int,
+    session: Session = Depends(get_session),
+) -> JobRead:
+    return job_service.get_job(session, job_id)
+
+
+@app.put("/jobs/{job_id}", response_model=JobRead)
+def update_job(
+    job_id: int,
+    payload: JobUpdate,
+    session: Session = Depends(get_session),
+) -> JobRead:
+    return job_service.update_job(session, job_id, payload)
+
+
+@app.delete("/jobs/{job_id}")
+def delete_job(
+    job_id: int,
+    session: Session = Depends(get_session),
+) -> dict[str, int | bool]:
+    return job_service.delete_job(session, job_id)

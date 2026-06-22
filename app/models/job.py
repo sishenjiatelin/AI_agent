@@ -3,6 +3,7 @@ from datetime import datetime, timezone
 from pydantic import field_validator
 from sqlmodel import Field, SQLModel
 
+
 class JobCreate(SQLModel):
     company: str
     title: str
@@ -24,7 +25,35 @@ class JobCreate(SQLModel):
         if not skills:
             raise ValueError("skills 至少需要 1 个有效技能")
         return skills
-    
+
+
+class JobUpdate(SQLModel):
+    company: str | None = None
+    title: str | None = None
+    jd_text: str | None = None
+    skills: list[str] | None = None
+
+    @field_validator("company", "title", "jd_text")
+    @classmethod
+    def optional_text_not_empty(cls, value: str | None) -> str | None:
+        if value is None:
+            return value
+        text = value.strip()
+        if not text:
+            raise ValueError("字段不能为空")
+        return text
+
+    @field_validator("skills")
+    @classmethod
+    def optional_skills_not_empty(cls, value: list[str] | None) -> list[str] | None:
+        if value is None:
+            return value
+        skills = [item.strip() for item in value if item.strip()]
+        if not skills:
+            raise ValueError("skills 至少需要 1 个有效技能")
+        return skills
+
+
 class Job(SQLModel, table=True):
     __tablename__ = "jobs"
 
