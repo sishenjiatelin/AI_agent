@@ -2,6 +2,14 @@
 ai_agent
 ├─  logs
 │  └─ day07_llm.logs
+├─ FULLTEST
+│  ├─ after.json
+│  ├─ app.db
+│  ├─ app.py
+│  ├─ before.txt
+│  ├─ log_sql_config.py
+│  ├─ main.py
+│  └─ test_logs.log
 ├─ README.md
 ├─ app
 │  ├─ __init__.py
@@ -11,16 +19,27 @@ ai_agent
 │  ├─ core
 │  │  ├─ __init__.py
 │  │  └─ config.py
+│  ├─ db
+│  │  ├─ __init__.py
+│  │  └─ session.py
 │  ├─ job_parser_core.py
 │  ├─ main.py
-│  ├─ schemas
+│  ├─ models
 │  │  ├─ __init__.py
 │  │  └─ job.py
+│  ├─ schemas
+│  │  ├─ __init__.py
+│  │  ├─ api.py
+│  │  └─ job.py
+│  ├─ services
+│  │  ├─ __init__.py
+│  │  └─ job_service.py
 │  └─ utils
 │     ├─ __init__.py
 │     ├─ io.py
 │     └─ logger.py
 ├─ data
+│  ├─ app.db
 │  ├─ day02_result.json
 │  ├─ day05_validated_jobs.json
 │  ├─ extracted_job_example.json
@@ -31,6 +50,7 @@ ai_agent
 ├─ docs
 │  ├─ day09_health_response.json
 │  ├─ day09_parse_response.json
+│  ├─ day10_curl.md
 │  └─ screenshots
 │     ├─ day09_health.png
 │     └─ day09_jobs_parse.png
@@ -40,7 +60,8 @@ ai_agent
 │  ├─ day05_validate.log
 │  ├─ day06_parse.log
 │  ├─ day08_cli.log
-│  └─ day09_api.log
+│  ├─ day09_api.log
+│  └─ day10_api.log
 ├─ main.py
 ├─ pytest.ini
 ├─ requirements.txt
@@ -52,6 +73,9 @@ ai_agent
 │  └─ validate_jobs.py
 └─ tests
    ├─ test_day09_api.py
+   ├─ test_day10api.py
+   ├─ test_day11_jobs_api.py
+   ├─ test_day12_jobs_crud.py
    ├─ test_io.py
    ├─ test_job_parser_cli.py
    ├─ test_job_parser_core.py

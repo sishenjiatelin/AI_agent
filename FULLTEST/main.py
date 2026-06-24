@@ -6,15 +6,6 @@ from contextlib import asynccontextmanager
 from typing import Annotated
 
 
-# data = {
-#             "company": "星火智能",
-#             "post": "AI应用开发实习生",
-#             "skills": ["Python", "FastAPI", "Pydantic", "RAG", "Agent", "Git"],
-#             "degree": "本科及以上",
-#             "experience_years": 1,
-#             "location": "北京",
-#             "description": "有项目作品集优先"
-#         }
 
 @asynccontextmanager
 async def lifespan(app:FastAPI):
