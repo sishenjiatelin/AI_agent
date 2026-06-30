@@ -7,9 +7,13 @@ ai_agent
 │  ├─ app.db
 │  ├─ app.py
 │  ├─ before.txt
+│  ├─ database.db
+│  ├─ dptest.pdf
 │  ├─ log_sql_config.py
 │  ├─ main.py
-│  └─ test_logs.log
+│  ├─ test_logs.log
+│  ├─ test_try.py
+│  └─ upload.py
 ├─ README.md
 ├─ app
 │  ├─ __init__.py
@@ -26,6 +30,7 @@ ai_agent
 │  ├─ main.py
 │  ├─ models
 │  │  ├─ __init__.py
+│  │  ├─ document.py
 │  │  └─ job.py
 │  ├─ schemas
 │  │  ├─ __init__.py
@@ -33,6 +38,7 @@ ai_agent
 │  │  └─ job.py
 │  ├─ services
 │  │  ├─ __init__.py
+│  │  ├─ document_service.py
 │  │  └─ job_service.py
 │  └─ utils
 │     ├─ __init__.py
@@ -51,6 +57,7 @@ ai_agent
 │  ├─ day09_health_response.json
 │  ├─ day09_parse_response.json
 │  ├─ day10_curl.md
+│  ├─ day13_curl.md
 │  └─ screenshots
 │     ├─ day09_health.png
 │     └─ day09_jobs_parse.png

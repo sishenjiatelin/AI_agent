@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from sqlmodel import Session
@@ -20,11 +20,14 @@ from app.schemas.job import JobSchema, LLMExtractedJob
 from app.services import job_service
 from app.utils.logger import setup_logger
 
+from app.models.document import DocumentRead
+from app.services import document_service
+
 BASE_DIR = Path(__file__).resolve().parents[1]
 LOG_PATH = BASE_DIR / "logs" / "day10_api.log"
 LOG_PATH.parent.mkdir(exist_ok=True)
 
-logger = setup_logger("day10_api", str(LOG_PATH))
+logger = setup_logger("day13_api", str(LOG_PATH))
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
@@ -33,8 +36,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(
-    title="AI Job Agent API",
-    version="0.1.0",
+    title="AI Job Agent",
+    version="day13",
     lifespan=lifespan,
 )
 
@@ -129,7 +132,7 @@ def to_job_read(job: Job) -> JobRead:
         created_at=job.created_at,
     )
 
-
+#数据库增删改查相关接口
 @app.post("/jobs", response_model=JobRead)
 def create_job(
     payload: JobCreate,
@@ -178,3 +181,26 @@ def delete_job(
     session: Session = Depends(get_session),
 ) -> dict[str, int | bool]:
     return job_service.delete_job(session, job_id)
+
+#上传文件接口
+@app.post("/documents/upload", response_model=DocumentRead)
+def upload_document(
+    file: UploadFile = File(...),
+    session: Session = Depends(get_session),
+) -> DocumentRead:
+    return document_service.save_uploaded_document(session, file)
+
+
+@app.get("/documents", response_model=list[DocumentRead])
+def list_documents(
+    session: Session = Depends(get_session),
+) -> list[DocumentRead]:
+    return document_service.list_documents(session)
+
+
+@app.get("/documents/{document_id}/content")
+def get_document_content(
+    document_id: int,
+    session: Session = Depends(get_session),
+) -> dict[str, object]:
+    return document_service.read_document_content(session, document_id)

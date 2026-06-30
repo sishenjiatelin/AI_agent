@@ -15,7 +15,7 @@ async def lifespan(app:FastAPI):
 LOG_FILE = Path(__file__).resolve().parents[0] / "test_logs.log"
 logger = SET_LOGGER("小测试用",LOG_FILE)
 SessionDep = Annotated[Session, Depends(get_session)]
-app = FastAPI(title="FASTapi和SOLmodel的回顾",lifespan=lifespan)
+app = FastAPI(title="项目前的测试",lifespan=lifespan)
 
 class ARequest(SQLModel):
     age: int
